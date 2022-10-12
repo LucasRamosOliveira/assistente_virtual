@@ -21,6 +21,7 @@ from selenium.webdriver.common.by import By
 
 
 
+
 nome = ""
 
 
@@ -106,7 +107,7 @@ def comando_voz():
 
                 elif (re.search(r'\b' + "qual é o seu nome" + r'\b',format(frase))):
                     
-                    respostas = ["meu nome é Olga", "Me chamo Olga", "O nome mais bonito que tem. Olga", "Olga. Que por sinal é um nome maravilhoso"]
+                    respostas = ["meu nome é Lorena", "Me chamo Olga", "O nome mais bonito que tem. Olga", "Olga. Que por sinal é um nome maravilhoso"]
                     resposta = respostas[random.randint(0, len(respostas)-1)]
                     engine.say(resposta)
                     engine.runAndWait()
@@ -310,7 +311,7 @@ while(True):
             frase = mic.recognize_google(audio,language='pt-BR')
             frase = frase.lower()
             
-            if (re.search(r'\b' + "olga" + r'\b',format(frase))):
+            if (re.search(r'\b' + "lorena" + r'\b',format(frase))):
                 t = re.search('olga (.*)',format(frase))
                 respostas = ["Olá", "Oi", "Pode falar"]
                 resposta = respostas[random.randint(0, len(respostas)-1)]
