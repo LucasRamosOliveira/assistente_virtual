@@ -18,6 +18,9 @@ import time
 import pyautogui
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from rembg import remove
+from PIL import Image
+
 
 
 
@@ -106,15 +109,13 @@ def comando_voz():
                     return True
 
                 elif (re.search(r'\b' + "qual é o seu nome" + r'\b',format(frase))):
-                    
-                    respostas = ["meu nome é Lorena", "Me chamo Olga", "O nome mais bonito que tem. Olga", "Olga. Que por sinal é um nome maravilhoso"]
+                    respostas = ["meu nome é Lorena", "Me chamo Lorena", "O nome mais bonito que tem. Lorena", "Lorena. Que por sinal é um nome maravilhoso"]
                     resposta = respostas[random.randint(0, len(respostas)-1)]
                     engine.say(resposta)
                     engine.runAndWait()
                     return True
 
                 elif (re.search(r'\b' + "tomar um cafezinho" + r'\b',format(frase)) or re.search(r'\b' + "vamos tomar um cafezinho" + r'\b',format(frase))):
-                    
                     respostas = ["Só se for para tomar um cafézinho e comer um queijo", "Só se for agora", "Vamos sim. Minha barriga esta roncando", "Boa ideia. Estou com fome"]
                     resposta = respostas[random.randint(0, len(respostas)-1)]
                     engine.say(resposta)
@@ -122,7 +123,6 @@ def comando_voz():
                     return True
 
                 elif (re.search(r'\b' + "o que você acha de um café com queijo" + r'\b',format(frase))):
-                    
                     respostas = ["Uai, esse trem é bom demais da conta, so", "Num tem trem mió que isso", "Uai, esse trem é muito bom. nó", "Uai, isso sim é um trem bão"]
                     resposta = respostas[random.randint(0, len(respostas)-1)]
                     engine.say(resposta)
@@ -130,13 +130,11 @@ def comando_voz():
                     return True
 
                 elif (re.search(r'\b' + "gosta de comer" + r'\b',format(frase))):
-                    
                     engine.say("Uai. Eu gosto de queijo com doce de leite, torresmo, uma pizza top")
                     engine.runAndWait()
                     return True
                 
                 elif (re.search(r'\b' + "que dia é hoje" + r'\b',format(frase))):
-                    
                     dias = ['Segunda-feira', 'Terça-feira', 'Quarta-feira',
                     'Quinta-Feira', 'Sexta-feira', 'Sábado', 'Domingo']
                     data_atual = datetime.now().strftime('%d/%m/%Y')
@@ -148,14 +146,12 @@ def comando_voz():
                     return True
 
                 elif (re.search(r'\b' + "que horas são" + r'\b',format(frase))) or (re.search(r'\b' + "horas" + r'\b',format(frase))):
-                    
                     hora_atual = datetime.now().strftime('%H:%M')
                     engine.say(f"Agora são {hora_atual}")
                     engine.runAndWait()
                     return True
 
                 elif (re.search(r'\b' + "qual a velocidade da internet" + r'\b',format(frase))):
-                    
                     engine.say("Vou verificar para você. Por favor, aguarde alguns instantes. Isso pode demorar um pouco")
                     engine.runAndWait()
                     download, upload = velocidade_internet()
@@ -164,12 +160,10 @@ def comando_voz():
                     return True
 
                 elif (re.search(r'\b' + "testar ping" + r'\b',format(frase))):
-                    
                     pings = []
                     for indice in range(4):
                         ping_atual = pingar_site("www.google.com.br")
                         pings.append(ping_atual)
-                    
 
                     media = int(sum(pings) / len(pings))
                     
@@ -178,41 +172,34 @@ def comando_voz():
                     return True
 
                 elif (re.search(r'\b' + "abrir calculadora" + r'\b',format(frase))):
-                    
                     engine.say("Ok")
                     engine.runAndWait()
                     abrir_programa("calculadora")
                     return True
 
                 elif (re.search(r'\b' + "qual a temperatura da cpu" + r'\b',format(frase))) or (re.search(r'\b' + "qual a temperatura do processador" + r'\b',format(frase))):
-                    
                     temperatura = pegar_cpu_temp()
                     engine.say(f"A temperatura do processador esta em {temperatura} graus")
                     engine.runAndWait()
                     return True
 
                 elif (re.search(r'\b' + "qual o uso da cpu" + r'\b',format(frase))) or (re.search(r'\b' + "qual o uso do processador" + r'\b',format(frase))):
-                    
                     utilizacao_cpu = uso_cpu()
                     engine.say(f"A utilização do processador esta em {utilizacao_cpu} por cento")
                     engine.runAndWait()
                     return True
 
                 elif (re.search(r'\b' + "qual o uso da memória ram" + r'\b',format(frase))) or (re.search(r'\b' + "qual o uso da memória" + r'\b',format(frase))):
-                    
                     utilizacao_ram = uso_ram()
                     engine.say(f"A utilização da memória ram é de {utilizacao_ram} por cento")
                     engine.runAndWait()
                     return True
 
-                elif (re.search(r'\b' + "criar pasta chamada (.*) no (.*)" + r'\b',format(frase))) or (re.search(r'\b' + "qual o uso da memória" + r'\b',format(frase))):
-                    t = re.search('criar pasta chamada (.*) no (.*)',format(frase))
-
+                elif (re.search(r'\b' + "criar pasta chamada (.*) em (.*)" + r'\b',format(frase))) or (re.search(r'\b' + "qual o uso da memória" + r'\b',format(frase))):
+                    t = re.search('criar pasta chamada (.*) em (.*)',format(frase))
                     nova_pasta = t.group(1)
                     diretorio = t.group(2)
-
                     pasta_user = path.expanduser("~")
-
                     engine.say(respostas_padrao[random.randint(0, len(respostas_padrao)-1)])
                     engine.runAndWait()
 
@@ -284,6 +271,18 @@ def comando_voz():
                     engine.say(f"Para amanhã espere por {chuva_amanha}, com máxima prevista de {temp_max_amanha} e minima de {temp_min_amanha}")
                     engine.runAndWait()
 
+                elif (re.search(r'\b' + "remover fundo das imagens da pasta (.*)" + r'\b',format(frase))):
+                    t = re.search('remover fundo das imagens da pasta (.*)',format(frase))
+                    texto = t.group(1)
+                    pasta_imagens = f'C:\\Users\\Lucas\\Pictures\\{texto}'
+                    for diretorio, subpastas, arquivos in os.walk(pasta_imagens):
+                        for arquivo in arquivos:
+                            nome_arquivo_com_extencao = arquivo.split('.')
+                            nome_arquivo = nome_arquivo_com_extencao[0]
+                            print(nome_arquivo)
+                            img = Image.open(f'C:\\Users\\Lucas\\Pictures\\Fotos\\{arquivo}')
+                            img_sem_fundo = remove(img)
+                            img_sem_fundo.save(f'C:\\Users\\Lucas\\Pictures\\Fotos\\sem_fundo_{nome_arquivo}.png')
 
 
                 print("Voce falou: "+frase)
